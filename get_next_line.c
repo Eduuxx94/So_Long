@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 18:03:15 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/04/16 17:55:30 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/04/24 21:06:12 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	get_size_linha(char *buff)
 char	*get_next_line(int fd)
 {
 	static char	buff[1 + 1];
-	int		buff_size;
-	char	*line;
-	int		line_size;
+	int			buff_size;
+	char		*line;
+	int			line_size;
 
 	line_size = 0;
 	line = NULL;

@@ -6,50 +6,72 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 20:49:43 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/04/19 22:13:30 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/04/24 21:05:53 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	ft_check_1thlrules(char **map)
+int	ft_check_case(t_vars *vr, char mapcase)
+{
+	if (mapcase == 'E')
+		vr->exi++;
+	if (mapcase == 'C')
+		vr->col++;
+	if (mapcase == 'P')
+		vr->pos++;
+	return (1);
+}
+
+int	ft_check_line(char **map, int y)
 {
 	int	i;
 
 	i = 0;
-	while (map[0][i] == '1')
-		i++;
-	if (map[0][i] == '\n' && map[0][i + 1] == '\0')
-		return (i);
+	if (y == 0)
+	{
+		while (map[y][i] == '1')
+			i++;
+		if (map[y][i] == '\n' && map[y][i + 1] == '\0')
+			return (i);
+	}
+	else
+	{
+		while (map[y][i] == '1')
+			i++;
+		if (map[y][i] == '\0')
+			return (i);
+	}
 	return (0);
 }
 
 void	ft_check_map(char **map, int y, char *path)
 {
-	t_vars	var;
+	t_vars	vr;
 
-	var.y = 1;
-	var.x = 0;
-	var.i = ft_check_1thlrules(map);
-	if (var.i <= 3)
-		printf("Your map %s not have the requested width.\n", path);
-	while (var.y < y && var.y > 0 && var.i > 0)
+	vr.y = 1;
+	vr.i = ft_check_line(map, 0);
+	vr.exi = 0;
+	vr.col = 0;
+	vr.pos = 0;
+	while (vr.y < y && vr.y != 0)
 	{
-		while (map[var.y][var.x] == '0' || map[var.y][var.x] == '1' || map
-		[var.y][var.x] == 'C' || map[var.y][var.x] == 'E' || map[var.y][var.x]
-		== 'P' || map[var.y][var.x] == '2')
-			var.x++;
-		if (var.x != var.i && map[var.y][var.x] != 10 && map[var.y][var.x] != 0)
-			var.y = 0;
+		vr.x = 0;
+		while (map[vr.y][0] == '1' && map[vr.y][vr.i - 1] == '1' && map[vr.y]
+		[vr.x] == '0' || map[vr.y][vr.x] == '1' || map[vr.y][vr.x] == 'C' ||
+		map[vr.y][vr.x] == 'E' || map[vr.y][vr.x] == 'P' || map[vr.y][vr.x]
+		== '2')
+			vr.x += ft_check_case(&vr, map[vr.y][vr.x]);
+		if (vr.x != vr.i && map[vr.y][vr.x - 1] != 10 && map[vr.y][vr.x] != 0)
+			vr.y = 0;
 		else
-			var.y++;
-		var.x = 0;
-		printf("Linha com exito\n");
+			vr.y++;
 	}
-	if (var.y <= 0)
-		printf("A error was found in your map body.\n");
-	if (var.y == y)
-		printf("Ultima linha do mapa.\n");
+	vr.i = ft_check_line(map, y);
+	if (vr.i == vr.x && y == vr.y && vr.exi && vr.col && vr.pos == 1)
+		printf("sucesso %i %i %i\n", vr.exi, vr.col, vr.pos);
+	else
+		printf("Error found in map body. Insert a valid map.\n");
 }
 
 /*ft_readmap is the fuction responsable for read map, put in memory, check all

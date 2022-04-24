@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 00:15:13 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/04/19 22:00:00 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/04/24 20:42:43 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <fcntl.h>
 
 typedef struct s_vars {
+	int			exi;
+	int			col;
+	int			pos;
 	int			x;
 	int			y;
 	int			i;
