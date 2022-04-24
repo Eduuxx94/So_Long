@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 00:15:13 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/04/15 17:22:01 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/04/19 22:00:00 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <fcntl.h>
 
 typedef struct s_vars {
-	int		x;
-	int		y;
-	int		i;
-	char	*map[200];
+	int			x;
+	int			y;
+	int			i;
+	char		*map[200];
 }			t_vars;
 
 typedef struct s_object {
@@ -39,7 +39,7 @@ typedef struct s_world {
 	int			x_y[2];
 }				t_world;
 
-void	ft_readmap(int fd);
+void	ft_readmap(int fd, char *argv);
 int		main(int argc, char **argv);
 
 void	ft_realoc2(char *line, char *buff, int i_line, int *buff_size);
