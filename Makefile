@@ -1,40 +1,34 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/03/29 21:25:26 by ede-alme          #+#    #+#              #
-#    Updated: 2022/04/15 18:00:57 by ede-alme         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+CC =		gcc
 
-NAME = so_long.a
+NAME =		so_long
 
-CC = clang
+CFLAGS =	-Wall -Wextra -Werror
 
-FLAGS = -Wall -Wextra -Werror
+MLXFLAGS =	-lmlx -framework OpenGL -framework AppKit -o
 
-SOURCE = jogo.c
+FSANITIZE =	-fsanitize=address
 
-OBJ = $(SOURCE:.c=.o)			
+SRCS =	main.c \
+		window_prints.c \
+		get_next_line.c
+
+OBJS =	$(SRCS:.c=.o)
 
 %.o: %.c
-	$(CC) $(FLAGS) -fsanitize=address -Imlx -c $< -o $@
+	$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
-all: $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(OBJS) $(FSANITIZE) $(CFLAGS) $(MLXFLAGS) $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-#	ar -rc $(NAME) $(OBJ)
 
 clean:
-	rm -f $(OBJ)
+		@rm -f $(OBJS)
+		@echo "$(NAME) $(OBJS): Foi Limpo!"
 
-fclean: clean
-	rm -f $(NAME)
+fclean:	clean
+		@rm -f $(NAME)
+		@echo "$(NAME): Foi Limpo!"
 
 re: fclean all
 
-.PHONY: all clean fclean re main bonus
+.PHONY: all clean fclean re
