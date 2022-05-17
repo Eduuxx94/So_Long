@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 21:20:03 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/05/07 19:14:36 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/05/17 23:06:46 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,28 @@
 //Falta criar uma funcao do player e que mova a imagem consoante o possivel.
 //Falta criar funcao feche o jogo e que tambem mostre os passos dados e colects.
 
-void	ft_print_map(t_world *world, char **map, int x, int y)
+void	ft_print_map(t_world *world, int x, int y)
 {
-	world->var.y = 0;
-	while (world->var.y < y)
+	world->vr.y = 0;
+	while (world->vr.y < y)
 	{
-		world->var.x = 0;
-		while (world->var.x < x)
+		world->vr.x = 0;
+		while (world->vr.x < x)
 		{
-			if (map[world->var.y][world->var.x] == '1')
+			if (world->map[world->vr.y][world->vr.x] == '1')
 				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[24], world->var.x * 32, (world->var.y + 1) * 32);
-			if (map[world->var.y][world->var.x] == 'P')
-				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[18], world->var.x * 32, (world->var.y + 1) * 32);
-			if (map[world->var.y][world->var.x] == '2')
-				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[0], world->var.x * 32, (world->var.y + 1) * 32);
-			if (map[world->var.y][world->var.x] == 'C')
-				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[6], world->var.x * 32, (world->var.y + 1) * 32);
-			if (map[world->var.y][world->var.x] == 'E')
-				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[12], world->var.x * 32, (world->var.y + 1) * 32);
-			world->var.x++;
+					->obj.img[24], world->vr.x * 32, (world->vr.y + 1) * 32);
+			if (world->map[world->vr.y][world->vr.x] == 'P')
+				ft_putplayer(world, world->vr.x, world->vr.y);
+			if (world->map[world->vr.y][world->vr.x] == '2')
+				ft_put_enemy(world, world->vr.x, world->vr.y);
+			if (world->map[world->vr.y][world->vr.x] == 'C')
+				ft_put_collects(world, world->vr.x, world->vr.y);
+			if (world->map[world->vr.y][world->vr.x] == 'E')
+				ft_put_exits(world, world->vr.x, world->vr.y);
+			world->vr.x++;
 		}
-		world->var.y++;
+		world->vr.y++;
 	}
 }
 
@@ -49,6 +45,8 @@ void	ft_load_images_3(t_world *world)
 {
 	world->obj.img[24] = mlx_xpm_file_to_image(world->mlx_ptr,
 			"./Tiles/wall.xpm", &world->obj.img_width, &world->obj.img_height);
+	world->obj.img[25] = mlx_xpm_file_to_image(world->mlx_ptr,
+			"./Tiles/back.xpm", &world->obj.img_width, &world->obj.img_height);
 }
 
 void	ft_load_images_2(t_world *world)
@@ -109,15 +107,23 @@ void	ft_load_images_1(t_world *world)
 	ft_load_images_2(world);
 }
 
-void	ft_init_game(int x, int y, char **map)
+void	ft_init_game(int x, int y, t_world *world)
 {
-	t_world		world;
-
-	world.mlx_ptr = mlx_init();
-	world.win_ptr = mlx_new_window(world.mlx_ptr, (x - 1) * 32, (y + 1)
+	//Falta por os collects na tela!!!!! easy
+	world->emov = 0;
+	world->wind_y = y;
+	world->wind_x = x;
+	world->time = 0;
+	world->steps = 0;
+	world->collec = 0;
+	world->max_steps = (y * x) / 3;
+	world->mlx_ptr = mlx_init();
+	world->win_ptr = mlx_new_window(world->mlx_ptr, (x - 1) * 32, (y + 1)
 			* 32, "My Game!");
-	ft_load_images_1(&world);
-	ft_print_map(&world, map, x, y);
-	system("leaks -- a.out");
-	mlx_loop(world.mlx_ptr);
+	ft_load_images_1(world);
+	mlx_hook(world->win_ptr, 17, 0, ft_close, world);
+	mlx_key_hook(world->win_ptr, keyboard_in, world);
+	mlx_loop_hook(world->mlx_ptr, ft_next_frame, world);
+	mlx_string_put(world->mlx_ptr, world->win_ptr, 9, 10, 0xFFFF00, "Collets:");
+	mlx_loop(world->mlx_ptr);
 }
