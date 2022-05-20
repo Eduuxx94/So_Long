@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 21:20:03 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/05/17 23:06:46 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:35:06 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,26 @@
 
 void	ft_print_map(t_world *world, int x, int y)
 {
-	world->vr.y = 0;
-	while (world->vr.y < y)
+	y = 0;
+	while (y < world->vr.y)
 	{
-		world->vr.x = 0;
-		while (world->vr.x < x)
+		x = 0;
+		while (x < world->vr.x)
 		{
-			if (world->map[world->vr.y][world->vr.x] == '1')
+			if (world->map[y][x] == '1')
 				mlx_put_image_to_window(world->mlx_ptr, world->win_ptr, world
-					->obj.img[24], world->vr.x * 32, (world->vr.y + 1) * 32);
-			if (world->map[world->vr.y][world->vr.x] == 'P')
-				ft_putplayer(world, world->vr.x, world->vr.y);
-			if (world->map[world->vr.y][world->vr.x] == '2')
-				ft_put_enemy(world, world->vr.x, world->vr.y);
-			if (world->map[world->vr.y][world->vr.x] == 'C')
-				ft_put_collects(world, world->vr.x, world->vr.y);
-			if (world->map[world->vr.y][world->vr.x] == 'E')
-				ft_put_exits(world, world->vr.x, world->vr.y);
-			world->vr.x++;
+					->obj.img[24], x * 32, (y + 1) * 32);
+			if (world->map[y][x] == 'P')
+				ft_putplayer(world, x, y);
+			if (world->map[y][x] == '2')
+				ft_put_enemy(world, x, y);
+			if (world->map[y][x] == 'C')
+				ft_put_collects(world, x, y);
+			if (world->map[y][x] == 'E')
+				ft_put_exits(world, x, y);
+			x++;
 		}
-		world->vr.y++;
+		y++;
 	}
 }
 
@@ -109,14 +109,16 @@ void	ft_load_images_1(t_world *world)
 
 void	ft_init_game(int x, int y, t_world *world)
 {
-	//Falta por os collects na tela!!!!! easy
 	world->emov = 0;
 	world->wind_y = y;
 	world->wind_x = x;
+	world->vr.y = y;
+	world->vr.x = x;
 	world->time = 0;
 	world->steps = 0;
 	world->collec = 0;
 	world->max_steps = (y * x) / 3;
+	world->vr.temp = y * x;
 	world->mlx_ptr = mlx_init();
 	world->win_ptr = mlx_new_window(world->mlx_ptr, (x - 1) * 32, (y + 1)
 			* 32, "My Game!");

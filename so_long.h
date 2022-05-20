@@ -6,17 +6,16 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 00:15:13 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/05/17 23:04:15 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/05/20 20:12:45 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
+# include "./ft_printf/ft_printf.h"
 # include <mlx.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <fcntl.h>
 
 //All variables from game inside t_vars:
@@ -31,6 +30,7 @@ typedef struct s_vars {
 	int		player_y;
 	int		i;
 	char	*line;
+	int		temp;
 }			t_vars;
 
 //All variables from the objects inside t_object
@@ -58,13 +58,13 @@ typedef struct s_world {
 //Here is the main of the game...
 int		ft_check_line(t_world *world, int y, char mapcase, t_vars vr);
 void	ft_check_map(t_world *world, int y);
-int		ft_open_argv(int fd, const char *argv, t_world *world);
 void	ft_alloc_map(int fd, t_world *world, int index);
+int		ft_open_argv(int fd, const char *argv, t_world *world);
 int		main(int argc, char **argv);
 
 //Utils for the gamedev
-void	ft_count_p(t_world *world, t_vars vr);
 char	*ft_itoa(int n);
+void	ft_count_p(t_world *world, t_vars vr);
 
 //All Get_next_line functions and utils bellow...
 void	ft_realoc2(char *line, char *buff, int i_line, int *buff_size);

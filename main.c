@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 20:49:43 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/05/16 21:32:55 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/05/20 21:09:15 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,27 +66,25 @@ void	ft_check_map(t_world *world, int y)
 	vr.i = ft_check_line(world, y, 0, vr);
 	if (vr.i == vr.x && y == vr.y && world->vr.e && world->vr.c && world->vr.p)
 		ft_init_game(vr.x + 1, vr.y + 1, world);
-	printf("Error found in map body. Make sure all rules are respected.\n");
+	ft_printf("Error found in map body. Make sure all rules are respected.\n");
 }
 
 void	ft_alloc_map(int fd, t_world *world, int index)
 {
 	char	*line;
 
-	world->vr.i = 0;
 	line = get_next_line(fd);
-	if (line)
+	if (line && ++world->vr.y)
 		ft_alloc_map(fd, world, (index + 1));
 	else
-		world->map = malloc((sizeof(char **) + 1) * index);
+		world->map = malloc((sizeof(char **) + 2) * index);
 	world->map[index] = line;
-	if (index > world->vr.i)
-		world->vr.i = index - 1;
 }
 
 int	ft_open_argv(int fd, const char *argv, t_world *world)
 {
 	world->vr.i = 0;
+	world->vr.y = 1;
 	while (argv[world->vr.i] != '\0')
 			world->vr.i++;
 	if (world->vr.i > 4 && argv[world->vr.i - 4] == '.' && argv[world->vr.i - 3]
@@ -104,18 +102,22 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 	{
 		world.vr.fd = open(argv[1], O_RDONLY);
-		world.vr.y = (ft_open_argv(world.vr.fd, argv[1], &world));
-		close (world.vr.fd);
-		if (world.vr.y > 1)
-			ft_check_map(&world, world.vr.y);
-		else if (world.vr.y > 0)
-			printf("Your map does not have the requested height -> |\n");
-		else if (world.vr.fd < 0)
-			printf("File not find...\n");
+		if (world.vr.fd < 0)
+			ft_printf("File not found...\n");
 		else
-			printf("Your file type does't match: -> '*.ber' \n");
+		{
+			world.vr.i = ft_open_argv(world.vr.fd, argv[1], &world);
+			close (world.vr.fd);
+			if (world.vr.i == 0)
+				ft_printf("File type does't match: -> '*.ber extension!' \n");
+			else if (world.vr.y < 3)
+				ft_printf("Your map does not have the requested height -> |\n");
+			else
+				ft_check_map(&world, world.vr.y - 2);
+		}
+		close(world.vr.fd);
 	}
 	else
-		printf("Insert a file path as argument!\n");
+		ft_printf("Insert a file path as argument!\n");
 	return (0);
 }

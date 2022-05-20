@@ -2,15 +2,19 @@ CC =		gcc
 
 NAME =		so_long
 
-CFLAGS =	-Wall -Wextra -Werror
+CFLAGS =	-fsanitize=address -Wall -Wextra -Werror
 
 MLXFLAGS =	-lmlx -framework OpenGL -framework AppKit -o
 
-FSANITIZE =	-fsanitize=address
 
 SRCS =	main.c \
 		window_prints.c \
-		get_next_line.c
+		get_next_line.c \
+		utils.c \
+		keyboard.c \
+		anim_game.c \
+		./ft_printf/ft_printf.c \
+		./ft_printf/ft_printf_utils.c \
 
 OBJS =	$(SRCS:.c=.o)
 
@@ -18,16 +22,16 @@ OBJS =	$(SRCS:.c=.o)
 	$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(FSANITIZE) $(CFLAGS) $(MLXFLAGS) $(NAME)
+	$(CC) $(OBJS) $(CFLAGS) $(MLXFLAGS) $(NAME)
 
 
 clean:
 		@rm -f $(OBJS)
-		@echo "$(NAME) $(OBJS): Foi Limpo!"
+		@echo "$(NAME) $(OBJS): Clear!"
 
 fclean:	clean
 		@rm -f $(NAME)
-		@echo "$(NAME): Foi Limpo!"
+		@echo "$(NAME): Clear!"
 
 re: fclean all
 

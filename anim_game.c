@@ -6,7 +6,7 @@
 /*   By: ede-alme <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:02:07 by ede-alme          #+#    #+#             */
-/*   Updated: 2022/05/17 23:04:36 by ede-alme         ###   ########.fr       */
+/*   Updated: 2022/05/18 21:20:30 by ede-alme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,27 @@ void	ft_putplayer(t_world *world, int x, int y)
 int	ft_next_frame(t_world *world)
 {
 	char	*collects;
+	char	*steps;
+	int		color;
 
+	color = 0x00FF00;
+	if (world->time++ && world->max_steps < world->vr.temp / 5)
+		color = 0xFFFF00;
+	if (world->max_steps < world->vr.temp / 8 && world->time < 35)
+		color = 0xFF0000;
+	else if (world->max_steps < world->vr.temp / 8)
+		color = 0;
+	world->vr.fd = 1;
 	collects = ft_itoa(world->collec);
-	world->time++;
+	steps = ft_itoa(world->steps);
 	mlx_clear_window(world->mlx_ptr, world->win_ptr);
 	ft_print_map(world, world->wind_x, world->wind_y);
-	mlx_string_put(world->mlx_ptr, world->win_ptr, 9, 10, 0xFFFF00, "Collets:");
+	mlx_string_put(world->mlx_ptr, world->win_ptr, 9, 10, 0xFFFF00, "Collect:");
 	mlx_string_put(world->mlx_ptr, world->win_ptr, 90, 10, 0xFFFF00, collects);
+	mlx_string_put(world->mlx_ptr, world->win_ptr, 150, 10, color, "Steps:");
+	mlx_string_put(world->mlx_ptr, world->win_ptr, 210, 10, color, steps);
 	free(collects);
+	free(steps);
 	if (world->time >= 60)
 		world->time = 0;
 	return (1);
