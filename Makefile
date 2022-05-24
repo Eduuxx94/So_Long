@@ -6,7 +6,6 @@ CFLAGS =	-fsanitize=address -Wall -Wextra -Werror
 
 MLXFLAGS =	-lmlx -framework OpenGL -framework AppKit -o
 
-
 SRCS =	main.c \
 		window_prints.c \
 		get_next_line.c \
@@ -24,14 +23,13 @@ OBJS =	$(SRCS:.c=.o)
 $(NAME): $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(MLXFLAGS) $(NAME)
 
+all: $(NAME)
 
 clean:
-		@rm -f $(OBJS)
-		@echo "$(NAME) $(OBJS): Clear!"
+	@rm -f $(OBJS)
 
 fclean:	clean
-		@rm -f $(NAME)
-		@echo "$(NAME): Clear!"
+	@rm -f $(NAME)
 
 re: fclean all
 
